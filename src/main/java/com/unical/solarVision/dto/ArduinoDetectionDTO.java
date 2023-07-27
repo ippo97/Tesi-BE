@@ -3,6 +3,7 @@ package com.unical.solarVision.dto;
 import java.time.LocalDateTime;
 
 
+import com.unical.solarVision.model.DetectionType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class ArduinoRilevazioneDTO {
-
-	private Long misurazioneInstantanea;
-	
-	private Long produzioneGiornaliera;
-	
-	private LocalDateTime ultimaMisurazione = LocalDateTime.now();
+public class ArduinoDetectionDTO {
+	private String plantName;
+	private Long value;
+	private DetectionType type;
 }

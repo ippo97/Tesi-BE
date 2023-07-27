@@ -1,6 +1,6 @@
 package com.unical.solarVision.controller;
 
-import com.unical.solarVision.dto.AuthenticationDto;
+import com.unical.solarVision.dto.AuthenticationDTO;
 import com.unical.solarVision.model.AuthToken;
 import com.unical.solarVision.service.impl.AuthenticationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class AuthenticationController {
     private AuthenticationServiceImpl authenticationService;
 
     @PostMapping
-    public AuthToken login(@RequestBody AuthenticationDto authDto) {
+    public AuthToken login(@RequestBody AuthenticationDTO authDto) {
         return this.authenticationService.login(authDto.getEmail(), authDto.getPassword());
     }
 }

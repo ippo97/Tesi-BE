@@ -1,6 +1,5 @@
 package com.unical.solarVision.service.impl;
 
-import antlr.Token;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.unical.solarVision.model.AuthToken;
