@@ -2,6 +2,7 @@ package com.unical.solarVision.service.impl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +21,14 @@ public class ArduinoDetectionImpl implements ArduinoDetectionService {
 	ArduinoDetectionRepository repository;
 
 	@Override
-	public List<ArduinoDetectionDTO> findAllByDay(LocalDate day) {
+	public List<ArduinoDetectionDTO> findAllByDay(String day) {
 		List<ArduinoDetection> list = repository.findAll();
 		List<ArduinoDetection> result = new ArrayList<>();
 
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate localDate = LocalDate.parse(day, formatter);
 		for (ArduinoDetection ad : list) {
-			if(ad.getDate().toLocalDate().equals(day)){
+			if(ad.getDate().toLocalDate().equals(localDate)){
 				result.add(ad);
 			}
 		}
@@ -34,12 +37,15 @@ public class ArduinoDetectionImpl implements ArduinoDetectionService {
 	}
 
 	@Override
-	public List<ArduinoDetectionDTO> findAllByRange(LocalDate day1, LocalDate day2) {
+	public List<ArduinoDetectionDTO> findAllByRange(String day1, String day2) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate localDate1 = LocalDate.parse(day1, formatter);
+		LocalDate localDate2 = LocalDate.parse(day2, formatter);
 		List<ArduinoDetection> list = repository.findAll();
 		List<ArduinoDetection> result = new ArrayList<>();
 		for (ArduinoDetection ad : list) {
 			LocalDate date = ad.getDate().toLocalDate();
-			if(!date.isBefore(day1) && !date.isAfter(day2) ){
+			if(!date.isBefore(localDate1) && !date.isAfter(localDate2) ){
 				result.add(ad);
 			}
 		}

@@ -16,16 +16,15 @@ public class ArduinoDetectionController {
     @Autowired
     private ArduinoDetectionService arduinoDetectionService;
     @GetMapping("findAllByDay/{day}")
-    public ResponseEntity<List<ArduinoDetectionDTO>> getAllByDay(@PathVariable LocalDate day) {
+    public ResponseEntity<List<ArduinoDetectionDTO>> getAllByDay(@PathVariable String day) {
         return new ResponseEntity<List<ArduinoDetectionDTO>>(arduinoDetectionService.findAllByDay(day), HttpStatus.OK);
 
     }
     @GetMapping("findAllByRange/{day1}/{day2}")
-    public ResponseEntity<List<ArduinoDetectionDTO>> getAllByRange(@PathVariable LocalDate day1, @PathVariable LocalDate day2) {
+    public ResponseEntity<List<ArduinoDetectionDTO>> getAllByRange(@PathVariable String day1, @PathVariable String day2) {
         return new ResponseEntity<List<ArduinoDetectionDTO>>(arduinoDetectionService.findAllByRange(day1, day2), HttpStatus.OK);
 
     }
-
     @PostMapping("/create")
     public ResponseEntity<ArduinoDetectionDTO> createArduinoDetection(@RequestBody ArduinoDetectionDTO dto) {
         ArduinoDetectionDTO createdDto = arduinoDetectionService.create(dto);

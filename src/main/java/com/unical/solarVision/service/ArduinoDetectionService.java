@@ -8,8 +8,8 @@ import com.unical.solarVision.dto.ArduinoDetectionDTO;
 
 public interface ArduinoDetectionService {
 	
-	List<ArduinoDetectionDTO> findAllByDay (LocalDate day);
-	List<ArduinoDetectionDTO> findAllByRange(LocalDate day1, LocalDate day2);
+	List<ArduinoDetectionDTO> findAllByDay (String day);
+	List<ArduinoDetectionDTO> findAllByRange(String day1, String day2);
 	ArduinoDetectionDTO create (ArduinoDetectionDTO dto);
 
 }
