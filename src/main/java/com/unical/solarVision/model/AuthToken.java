@@ -1,5 +1,6 @@
 package com.unical.solarVision.model;
 
+import com.unical.solarVision.dto.UserDTO;
 import lombok.*;
 
 import java.util.Date;
@@ -15,4 +16,6 @@ public class AuthToken {
     private String type;
 
     private Date expires_in;
+
+    private String userId;
 }

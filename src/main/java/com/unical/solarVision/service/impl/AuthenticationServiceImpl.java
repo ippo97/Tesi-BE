@@ -2,6 +2,7 @@ package com.unical.solarVision.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.unical.solarVision.mapper.UserMapper;
 import com.unical.solarVision.model.AuthToken;
 import com.unical.solarVision.model.User;
 import com.unical.solarVision.repository.UserRepository;
@@ -40,7 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         token.setType("bearer");
         token.setToken(JwtProvider.createJwt(email, claimMap));
         token.setExpires_in(DateTime.now().plusDays(1).toDate());
-
+        token.setUserId(user.getId().toString());
         return token;
     }
 }

@@ -3,10 +3,12 @@ package com.unical.solarVision.service.impl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.unical.solarVision.dto.ArduinoDetectionDTO;
+import com.unical.solarVision.dto.DailyArduinoDetectionDTO;
+import com.unical.solarVision.dto.GroupedArduinoDetectionDTO;
 import com.unical.solarVision.mapper.ArduinoDetectionMapper;
 import com.unical.solarVision.model.ArduinoDetection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,23 +23,26 @@ public class ArduinoDetectionImpl implements ArduinoDetectionService {
 	ArduinoDetectionRepository repository;
 
 	@Override
-	public List<ArduinoDetectionDTO> findAllByDay(String day) {
+	public DailyArduinoDetectionDTO findAllByDay(String day) {
 		List<ArduinoDetection> list = repository.findAll();
-		List<ArduinoDetection> result = new ArrayList<>();
+		List<ArduinoDetection> arduinoDetectionList = new ArrayList<>();
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate localDate = LocalDate.parse(day, formatter);
 		for (ArduinoDetection ad : list) {
 			if(ad.getDate().toLocalDate().equals(localDate)){
-				result.add(ad);
+				arduinoDetectionList.add(ad);
 			}
 		}
-		return ArduinoDetectionMapper.INSTANCE.toArduinoDetectionDTOList(result);
-
+		DailyArduinoDetectionDTO result = new DailyArduinoDetectionDTO();
+		result.setDay(localDate);
+		result.setDetections(ArduinoDetectionMapper.INSTANCE.toArduinoDetectionDTOList(arduinoDetectionList));
+		result.calculateTotalsPerHour();
+		return result;
 	}
 
 	@Override
-	public List<ArduinoDetectionDTO> findAllByRange(String day1, String day2) {
+	public List<GroupedArduinoDetectionDTO> findAllByRange(String day1, String day2) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate localDate1 = LocalDate.parse(day1, formatter);
 		LocalDate localDate2 = LocalDate.parse(day2, formatter);
@@ -49,7 +54,28 @@ public class ArduinoDetectionImpl implements ArduinoDetectionService {
 				result.add(ad);
 			}
 		}
-		return ArduinoDetectionMapper.INSTANCE.toArduinoDetectionDTOList(result);
+		List<ArduinoDetectionDTO> arduinoDetectionDTOList = ArduinoDetectionMapper.INSTANCE.toArduinoDetectionDTOList(result);
+		//Crea una mappa con il fine di raggruppare tutte le occorrenze per giorno (infatti la chiave è il giorno)
+		Map<LocalDate, List<ArduinoDetectionDTO>> groupedByDay = arduinoDetectionDTOList.stream()
+				.collect(Collectors.groupingBy(detection -> detection.getDate().toLocalDate()));
+
+		List<GroupedArduinoDetectionDTO> groupedArduinoDetectionDTO = new ArrayList<>();
+		for (Map.Entry<LocalDate, List<ArduinoDetectionDTO>> entry : groupedByDay.entrySet()) {
+			GroupedArduinoDetectionDTO groupedDto = new GroupedArduinoDetectionDTO();
+			groupedDto.setDay(entry.getKey());
+			groupedDto.setDetections(entry.getValue());
+			groupedDto.calculateTotals();
+			groupedArduinoDetectionDTO.add(groupedDto);
+		}
+
+		//ordinamento per data crescente
+		Collections.sort(groupedArduinoDetectionDTO, new Comparator<GroupedArduinoDetectionDTO>() {
+			@Override
+			public int compare(GroupedArduinoDetectionDTO dto1, GroupedArduinoDetectionDTO dto2) {
+				return dto1.getDay().compareTo(dto2.getDay());
+			}
+		});
+		return groupedArduinoDetectionDTO;
 	}
 
 	@Override

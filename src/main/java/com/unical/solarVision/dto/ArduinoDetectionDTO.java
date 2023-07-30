@@ -1,5 +1,6 @@
 package com.unical.solarVision.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -17,4 +18,5 @@ public class ArduinoDetectionDTO {
 	private String plantName;
 	private Long value;
 	private DetectionType type;
+	private LocalDateTime date;
 }

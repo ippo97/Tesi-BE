@@ -31,6 +31,7 @@ public class StartUpService {
             adminUser.setEmail(this.email);
             adminUser.setName("Admin");
             adminUser.setSurname("Admin");
+            adminUser.setEmailNotification(false);
             adminUser.setPassword(encoder.encode(this.password));
 
             userRepository.save(adminUser);

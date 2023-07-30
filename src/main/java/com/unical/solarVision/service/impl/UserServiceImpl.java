@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService {
 		oldUser.setEmail(dto.getEmail());
 		oldUser.setSurname(dto.getSurname());
 		oldUser.setName(dto.getName());
+		oldUser.setEmailNotification(dto.isEmailNotification());
 		return UserMapper.INSTANCE.toUserDTO(repository.save(oldUser));
 	}
 }

@@ -25,6 +25,8 @@ public class User {
 
     private String surname;
 
+    private boolean isEmailNotification;
+
     @Column(nullable = false, unique = true)
     private String email;
 
