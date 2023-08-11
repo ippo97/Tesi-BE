@@ -1,6 +1,7 @@
 package com.unical.solarVision.controller;
 
 import com.unical.solarVision.dto.ArduinoDetectionDTO;
+import com.unical.solarVision.dto.ArduinoDetectionRawData;
 import com.unical.solarVision.dto.DailyArduinoDetectionDTO;
 import com.unical.solarVision.dto.GroupedArduinoDetectionDTO;
 import com.unical.solarVision.service.ArduinoDetectionService;
@@ -24,8 +25,8 @@ public class ArduinoDetectionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ArduinoDetectionDTO> createArduinoDetection(@RequestBody ArduinoDetectionDTO dto) {
-        ArduinoDetectionDTO createdDto = arduinoDetectionService.create(dto);
+    public ResponseEntity<ArduinoDetectionDTO> createArduinoDetection(@RequestBody ArduinoDetectionRawData rawData) {
+        ArduinoDetectionDTO createdDto = arduinoDetectionService.create(rawData);
         return new ResponseEntity<>(createdDto, HttpStatus.CREATED);
     }
 
@@ -35,5 +36,10 @@ public class ArduinoDetectionController {
         List<GroupedArduinoDetectionDTO> allDetections = arduinoDetectionService.findAllByRange(start, end);
 
         return new ResponseEntity<>(allDetections, HttpStatus.OK);
+    }
+
+    @GetMapping("/lastdetection")
+    public ResponseEntity<ArduinoDetectionDTO> getLastDetection () {
+            return new ResponseEntity<ArduinoDetectionDTO>(arduinoDetectionService.getLastDetection(), HttpStatus.OK);
     }
 }

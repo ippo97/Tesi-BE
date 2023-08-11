@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 
 @Entity
-@Table(name = "ArduinoDetection")
+@Table(name = "arduinoDetection")
 public class ArduinoDetection {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

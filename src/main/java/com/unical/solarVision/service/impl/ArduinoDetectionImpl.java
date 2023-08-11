@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.unical.solarVision.dto.ArduinoDetectionDTO;
+import com.unical.solarVision.dto.ArduinoDetectionRawData;
 import com.unical.solarVision.dto.DailyArduinoDetectionDTO;
 import com.unical.solarVision.dto.GroupedArduinoDetectionDTO;
 import com.unical.solarVision.mapper.ArduinoDetectionMapper;
@@ -79,11 +80,22 @@ public class ArduinoDetectionImpl implements ArduinoDetectionService {
 	}
 
 	@Override
-	public ArduinoDetectionDTO create(ArduinoDetectionDTO dto) {
-		ArduinoDetection entity = ArduinoDetectionMapper.INSTANCE.toArduinoDetectionEntity(dto);
+	public ArduinoDetectionDTO create(ArduinoDetectionRawData rawData) {
+		ArduinoDetection entity = new ArduinoDetection();
+		entity.setType(rawData.getType());
+		entity.setValue(rawData.getValue());
+		entity.setPlantName(rawData.getPlantName());
 		entity.setDate(LocalDateTime.now());
 		repository.save(entity);
-		return dto;
+		return ArduinoDetectionMapper.INSTANCE.toArduinoDetectionDTO(entity);
 	}
 
+	@Override
+	public ArduinoDetectionDTO getLastDetection() {
+		ArduinoDetection lastDetection = repository.lastDetection();
+		if(lastDetection!=null)
+			return ArduinoDetectionMapper.INSTANCE.toArduinoDetectionDTO(lastDetection);
+		else
+			return null;
+	}
 }
